@@ -1,8 +1,8 @@
 function render(hash?: string) {
   const href = window.location.href;
 
-  document.querySelector("#app")!.textContent = hash
-    ? href.includes("#")
+  document.querySelector('#app')!.textContent = hash
+    ? href.includes('#')
       ? href.replace(/#.*/, hash)
       : href + hash
     : window.location.href;
@@ -14,11 +14,18 @@ function render(hash?: string) {
 //   });
 // }
 
-document.body.addEventListener("click", (ev) => {
-  if ((ev.target as HTMLElement).matches("a")) {
-    const hash = (ev.target as HTMLAnchorElement).hash;
+document.body.addEventListener('click', (ev) => {
+  if ((ev.target as HTMLElement).matches('a')) {
+    // const hash = (ev.target as HTMLAnchorElement).hash;
 
-    render(hash);
+    ev.preventDefault();
+
+    if (!window.history)
+      throw new Error("Your browser doesn't support History API");
+
+    history.pushState({}, '', (<HTMLAnchorElement>ev.target).href);
+
+    render();
   }
 });
 
